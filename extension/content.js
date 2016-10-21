@@ -22,18 +22,22 @@ window.addEventListener('click', () => {
   }
 
   const numberTextNodes = (arr) => {
-    const regex = /.*[0-9].*/;
-    return arr.filter((el) => el.textNode.match(regex));
+    const regex = /\+?(\d+\W{0,3}\d+\W{0,3}\d+\W{0,3}\d+\W{0,3}\d+)/
+    return arr.filter((el) => {
+      const strings = el.textNode.match(regex);
+      if (strings) {
+        const str = strings[1].split('').filter((c) => !isNaN(c) && c.trim()).join('');
+        return str.length > 10 && str.length < 15;
+      }
+    });
   }
 
-  numberTextNodes(getTextNodes()).forEach((el) => {
+  numberTextNodes(getTextNodes()).forEach((string) => {
     const t = document.createTextNode('hi');
     const n = document.createElement('h1');
     n.appendChild(t);
     const ourNode = n;
 
-    el.grandParent.replaceChild(ourNode, el.parentNode);
+    string.grandParent.replaceChild(ourNode, string.parentNode);
   });
-
-  console.log('>>>>', getTextNodes());
 });
